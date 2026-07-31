@@ -1,0 +1,20 @@
+In app/api/compile/route.ts, change the worker fetch headers to:
+
+headers: {
+  'Content-Type': 'application/json',
+  Authorization: `Bearer ${process.env.WORKER_SECRET}`,
+},
+
+Also replace the fake simulated success block with:
+
+if (!workerUrl) {
+  return NextResponse.json(
+    { success: false, error: 'Compilation worker is not configured.' },
+    { status: 503 }
+  );
+}
+
+Add to the main app .env:
+
+WORKER_URL=https://YOUR-WORKER.up.railway.app
+WORKER_SECRET=THE_SAME_LONG_RANDOM_SECRET
